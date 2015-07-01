@@ -1,11 +1,8 @@
+'use strict';
 import React from 'react';
+import Router from 'react-router';
+import routes from './config/routes.js';
 
-class App extends React.Component {
-    render() {
-       return (
-               <div>Hello WOrld</div>
-           )
-    }
-}
-
-React.render(<App />, document.getElementById('app'));
+Router.run(routes, (Root, state) => {
+    React.render(<Root {...state} />, document.getElementById('app'));
+});
