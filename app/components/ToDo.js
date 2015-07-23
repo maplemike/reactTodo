@@ -5,21 +5,6 @@ import localforage1 from 'localforage';
 import TodoItemList from './Body/TodoItemList.js';
 import NewTodo from './Header/NewTodo.js';
 
-//let base = Rebase.createClass('https://procedurized.firebaseio.com/');
-
-let exampleToDo = {
-    title: 'This is an example procedure',
-    items: [
-        {
-            completed: false,
-            description: 'you must do this'},
-        {
-            completed: true,
-            description: 'already done bitches'
-        }
-    ]
-};
-
 class ToDo extends React.Component{
     constructor(props) {
         super(props);
