@@ -23739,21 +23739,13 @@
 
 	var _BodyTodoItemListJs2 = _interopRequireDefault(_BodyTodoItemListJs);
 
+	var _BodyNewTodoItemJs = __webpack_require__(207);
+
+	var _BodyNewTodoItemJs2 = _interopRequireDefault(_BodyNewTodoItemJs);
+
 	var _HeaderNewTodoJs = __webpack_require__(206);
 
 	var _HeaderNewTodoJs2 = _interopRequireDefault(_HeaderNewTodoJs);
-
-	//let base = Rebase.createClass('https://procedurized.firebaseio.com/');
-
-	var exampleToDo = {
-	    title: 'This is an example procedure',
-	    items: [{
-	        completed: false,
-	        description: 'you must do this' }, {
-	        completed: true,
-	        description: 'already done bitches'
-	    }]
-	};
 
 	var ToDo = (function (_React$Component) {
 	    function ToDo(props) {
@@ -23773,12 +23765,8 @@
 	        value: function init() {
 	            var _this = this;
 
-	            //this.setState(exampleToDo);
-	            //localforage.getItem('todos', (then) => {
-	            //    console.log(then);
-	            //});
-
 	            localforage.getItem('todos').then(function (todos) {
+	                // arrays start at 0 but we want a more user friendly display so we start at 1 in the url params
 	                var todo = todos[_this.router.getCurrentParams().tdid - 1];
 	                _this.setState(todo);
 	            });
@@ -23795,6 +23783,7 @@
 	                items: []
 	            };
 
+	            // add the new toodo to the list of toodos stored under key 'toodos'
 	            localforage.getItem('todos').then(function (value) {
 	                if (value == null) {
 	                    todos = [todo];
@@ -23803,15 +23792,33 @@
 	                }
 
 	                localforage.setItem('todos', todos).then(function (res) {
-	                    //console.log(res);
 	                    var position = res.length;
+	                    // this is supposed to move us to the newly created toodo- but doesn't seem to work
 	                    _this2.router.transitionTo('todo', { tdid: position });
 	                });
 	            });
 	        }
 	    }, {
 	        key: 'handleNewTodoItem',
-	        value: function handleNewTodoItem() {}
+	        value: function handleNewTodoItem(text) {
+	            var _this3 = this;
+
+	            console.log('simulating addition of ', text);
+	            var elem = this.router.getCurrentParams().tdid - 1;
+	            localforage.getItem('todos').then(function (todos) {
+	                //console.log(todos, elem);
+	                //debugger;
+	                todos[elem].items.push({ completed: false, description: text });
+	                //debugger;
+
+	                localforage.setItem('todos', todos).then(function (res) {
+	                    _this3.router.transitionTo('todo', { tdid: elem + 1 });
+	                });
+	            });
+	            // we need to refresh the page to show the newly added toodo item
+	            // the page seems to refresh but doesn't show the newly added item
+	            //  componentDidMount() doesn't get called?
+	        }
 	    }, {
 	        key: 'componentWillMount',
 	        value: function componentWillMount() {
@@ -23820,6 +23827,7 @@
 	    }, {
 	        key: 'componentDidMount',
 	        value: function componentDidMount() {
+	            console.log('called');
 	            this.init();
 	        }
 	    }, {
@@ -23835,7 +23843,8 @@
 	                    null,
 	                    this.state.title
 	                ),
-	                _react2['default'].createElement(_BodyTodoItemListJs2['default'], { items: this.state.items })
+	                _react2['default'].createElement(_BodyTodoItemListJs2['default'], { items: this.state.items }),
+	                _react2['default'].createElement(_BodyNewTodoItemJs2['default'], { handleNewTodoItem: this.handleNewTodoItem.bind(this) })
 	            );
 	        }
 	    }]);
@@ -27145,6 +27154,81 @@
 	})(_react2['default'].Component);
 
 	exports['default'] = NewTodo;
+	module.exports = exports['default'];
+
+/***/ },
+/* 207 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var NewTodoItem = (function (_React$Component) {
+	    function NewTodoItem() {
+	        _classCallCheck(this, NewTodoItem);
+
+	        _get(Object.getPrototypeOf(NewTodoItem.prototype), 'constructor', this).apply(this, arguments);
+	    }
+
+	    _inherits(NewTodoItem, _React$Component);
+
+	    _createClass(NewTodoItem, [{
+	        key: 'handleSubmit',
+	        value: function handleSubmit() {
+	            // do something
+	            var text = this.refs.tditem.getDOMNode().value;
+	            this.refs.tditem.getDOMNode().value = '';
+	            this.props.handleNewTodoItem(text);
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            return _react2['default'].createElement(
+	                'div',
+	                { className: 'col-sm-12' },
+	                _react2['default'].createElement(
+	                    'form',
+	                    { onSubmit: this.handleSubmit.bind(this) },
+	                    _react2['default'].createElement(
+	                        'div',
+	                        { className: 'form-group col-sm-7' },
+	                        _react2['default'].createElement('input', { type: 'text', className: 'form-control', ref: 'tditem', placeholder: 'What has to be done?' })
+	                    ),
+	                    _react2['default'].createElement(
+	                        'div',
+	                        { className: 'form-group col-sm-5' },
+	                        _react2['default'].createElement(
+	                            'button',
+	                            { type: 'submit', className: 'btn btn-block btn-primary' },
+	                            'Add to List'
+	                        )
+	                    )
+	                )
+	            );
+	        }
+	    }]);
+
+	    return NewTodoItem;
+	})(_react2['default'].Component);
+
+	exports['default'] = NewTodoItem;
 	module.exports = exports['default'];
 
 /***/ }
