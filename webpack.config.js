@@ -10,6 +10,16 @@ module.exports = {
                 exclude: /(node_modules|bower_components)/,
                 loader: 'babel'
             }
+        ],
+        noParse: [
+            /localforage\/dist\/localforage.js/
         ]
+    },
+    resolve: {
+        alias: {
+            localforage: 'localforage/dist/localforage.js'
+        }
+
     }
+
 };
